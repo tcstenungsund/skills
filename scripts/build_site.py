@@ -47,7 +47,7 @@ PLATFORMS = [
         "Öppna gemini.google.com, välj <em>Gem-hanteraren</em> och sedan <em>Ny Gem</em>.",
         "Klistra in texten i fältet för instruktioner.",
         "Ladda upp filerna under <strong>Filer att ladda upp</strong> som kunskap (om det finns några).",
-        "Ge Gem:en skillens namn och version, till exempel ”Skapa prov 1.2.0”, och spara.",
+        "Ge Gem:en skillens namn och version, till exempel ”Värdegrund 1.0.0”, och spara.",
     ]),
     ("chatgpt", "I ChatGPT", [
         "Klicka på <strong>Kopiera instruktionen</strong> ovan.",
