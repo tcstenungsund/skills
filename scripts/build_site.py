@@ -375,14 +375,15 @@ def load_external(sources, ext_root, allow, errors, warnings, taken, base=GITHUB
 DEFAULT_THEME = {"title": "Skills-galleriet", "primary": "#222c37", "accent": "#f5b835",
                  "secondary": "#31b1b3", "background": "#ffffff", "text": "#222c37", "logo": ""}
 
-CSS = """:root{--p:%(primary)s;--a:%(accent)s;--s:%(secondary)s;--bg:%(background)s;--fg:%(text)s;--muted:#555555;--line:#e8e8e8;--tint:#fdf1d7}
+CSS = """/* Dark mode: the browser picks a side of each light-dark() from the visitor's system setting. */
+:root{color-scheme:light dark;--p:%(primary)s;--a:%(accent)s;--s:%(secondary)s;--bg:light-dark(%(background)s,%(primary)s);--fg:light-dark(%(text)s,#e8e8e8);--link:light-dark(%(primary)s,#e8e8e8);--muted:light-dark(#555555,#b8bcc1);--line:light-dark(#e8e8e8,#555555);--panel:light-dark(#e8e8e8,#2f3a46);--tint:light-dark(#fdf1d7,#3d3826);--hover-bg:light-dark(%(primary)s,#e8e8e8);--hover-fg:light-dark(#ffffff,%(primary)s);--focus:light-dark(%(primary)s,#e8e8e8)}
 *{box-sizing:border-box}
 body{margin:0;font:1rem/1.6 "Helvetica Neue",Helvetica,Arial,sans-serif;background:var(--bg);color:var(--fg)}
 .top{background:var(--p);border-bottom:.4rem solid var(--a);padding:1rem}
 .top a{max-width:48rem;margin:0 auto;display:flex;align-items:center;gap:.6rem;color:#fff;font-weight:300;font-size:1.05rem;letter-spacing:.14em;text-transform:uppercase;text-decoration:none}
 .logo{height:2rem}
 main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem}
-a{color:var(--p);text-underline-offset:.15em}
+a{color:var(--link);text-underline-offset:.15em}
 a:hover{text-decoration-color:var(--s);text-decoration-thickness:.12em}
 h1{margin:.75rem 0 1rem;font-weight:300;font-size:clamp(1.6rem,6vw,2.4rem);line-height:1.2;letter-spacing:.06em;text-transform:uppercase}
 h2{margin:2.5rem 0 .75rem;font-size:1.3rem}
@@ -393,12 +394,13 @@ h2{margin:2.5rem 0 .75rem;font-size:1.3rem}
 .meta{color:var(--muted);font-size:.9rem}
 .flag{display:inline-block;background:var(--a);color:var(--p);border-radius:1rem;padding:0 .6rem;font-size:.85rem;font-weight:700}
 .notice{background:var(--tint);border-left:.4rem solid var(--a);padding:.7rem .9rem}
-.version{font-size:1.15rem;font-weight:700;border-left:.4rem solid var(--a);padding:.6rem .9rem;background:var(--line)}
-textarea{width:100%%;min-height:14rem;font:.85rem/1.45 ui-monospace,Menlo,Consolas,monospace;padding:.6rem;border:1px solid var(--muted);color:var(--fg)}
+.version{font-size:1.15rem;font-weight:700;border-left:.4rem solid var(--a);padding:.6rem .9rem;background:var(--panel)}
+textarea{width:100%%;min-height:14rem;font:.85rem/1.45 ui-monospace,Menlo,Consolas,monospace;padding:.6rem;border:1px solid var(--muted);color:var(--fg);background:var(--bg)}
 button,.btn{display:inline-block;background:var(--a);color:var(--p);border:0;padding:.85rem 1.4rem;font-family:inherit;font-size:.95rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;cursor:pointer}
-button:hover,.btn:hover{background:var(--p);color:#fff}
-a:focus-visible,button:focus-visible,textarea:focus-visible{outline:3px solid var(--p);outline-offset:2px}
+button:hover,.btn:hover{background:var(--hover-bg);color:var(--hover-fg)}
+a:focus-visible,button:focus-visible,textarea:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
 .top a:focus-visible{outline-color:#fff}
+.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%%);white-space:nowrap}
 .shot{max-width:100%%;height:auto;border:1px solid var(--line)}
 footer{max-width:50rem;margin:3rem auto 0;padding:1.25rem 1rem;color:var(--muted);font-size:.85rem;border-top:.25rem solid var(--a)}
 """
@@ -426,6 +428,7 @@ def page(title, body, depth, theme, script=""):
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
 <title>{esc(title)}</title>
 <style>{CSS % theme}</style>
 </head>
@@ -540,7 +543,7 @@ def index_page(local, external, today, theme):
             f'<p class="meta">{meta_line(s, today)}</p></article>'
             for s in sorted(skills, key=lambda s: s["title"].lower()))
 
-    body = f"""<h1>{esc(theme['title'])}</h1>
+    body = f"""<h1 class="visually-hidden">{esc(theme['title'])}</h1>
 <p>Här finns skills (färdiga instruktioner) för AI-tjänster som Claude, Gemini, ChatGPT och Copilot.
 Klicka på en skill för att kopiera instruktionen eller ladda ner den. Kontrollera versionen ibland –
 har din kopia ett lägre versionsnummer än det som står här ska du byta ut den.</p>
