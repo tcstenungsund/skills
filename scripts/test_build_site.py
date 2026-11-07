@@ -166,6 +166,10 @@ class TestBuild(unittest.TestCase):
             pg = (site / "skills" / "bra-skill" / "index.html").read_text(encoding="utf-8")
             self.assertIn("Nuvarande version: 1.2.0 (2026-11-07)", pg)
             self.assertNotIn("screenshots/", pg)
+            self.assertNotIn("kanske inte får plats i Copilot", pg)
+            long = dict(local[0], slug="lang", body="x" * (b.PASTE_LIMIT + 1))
+            self.assertIn("kanske inte får plats i Copilot", b.skill_page(long, datetime.date.today(),
+                                                                         b.DEFAULT_THEME, set()))
             idx = (site / "index.html").read_text(encoding="utf-8")
             self.assertIn("kan behöva ses över", idx)
             self.assertIn("bra-skill/index.html", (site / "skills" / "gammal" / "index.html").read_text())

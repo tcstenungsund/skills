@@ -58,8 +58,11 @@ PLATFORMS = [
     ]),
     ("copilot", "I Copilot", [
         "Klicka på <strong>Kopiera instruktionen</strong> ovan.",
-        "Öppna Copilot Chat och gå till <em>Settings → Personalization → Custom instructions</em>.",
+        "Öppna Copilot Chat och gå till <em>Settings → Personalization → Custom instructions</em>. "
+        "Saknas inställningen eller går den inte att ändra kan skolans IT ha stängt av den – fråga IT.",
         "Klistra in texten och spara.",
+        "Rulla till slutet av rutan och kontrollera att sista raden kom med. Copilot kan klippa av "
+        "för lång text utan att säga till.",
         "Obs! Copilot har bara <strong>en</strong> instruktionsruta. Klistrar du in en ny skill ersätter du den gamla – ha en skill i taget.",
     ]),
 ]
@@ -385,6 +388,7 @@ h2{margin-top:2rem}
 .card h3{margin:0 0 .25rem}
 .meta{color:var(--muted);font-size:.92rem}
 .flag{display:inline-block;background:#fff4e5;color:var(--warn);border:1px solid var(--warn);border-radius:1rem;padding:0 .55rem;font-size:.85rem}
+.notice{background:#fff4e5;color:#4a2700;border-left:.35rem solid var(--warn);padding:.6rem .8rem}
 .version{font-size:1.2rem;font-weight:700;border-left:.35rem solid var(--p);padding:.5rem .8rem;background:var(--card)}
 textarea{width:100%%;min-height:14rem;font:.85rem/1.4 ui-monospace,Menlo,Consolas,monospace;padding:.5rem}
 button,.btn{display:inline-block;background:var(--p);color:#fff;border:0;border-radius:.4rem;padding:.8rem 1.3rem;font-size:1rem;font-weight:600;text-decoration:none;cursor:pointer}
@@ -469,10 +473,17 @@ def skill_page(s, today, theme, screenshots):
         file_list = "<p>Den här skillen har inga extra filer.</p>"
 
     steps = ""
+    paste_len = len(paste_block(s))
     for key, heading, items in PLATFORMS:
         shot = (f'<p><img class="shot" src="../../screenshots/{key}.png" '
                 f'alt="Skärmbild: {esc(heading)}"></p>') if key in screenshots else ""
-        steps += (f"<h3>{heading}</h3><ol>" + "".join(f"<li>{i}</li>" for i in items)
+        notice = ""
+        if key == "copilot" and paste_len > PASTE_LIMIT:
+            notice = (f'<p class="notice"><strong>Obs!</strong> Den här instruktionen är lång '
+                      f'({paste_len:,} tecken).'.replace(",", " ") +
+                      ' Den kanske inte får plats i Copilot. Kommer inte hela texten med – '
+                      'använd skillen i Gemini eller ChatGPT i stället.</p>')
+        steps += (f"<h3>{heading}</h3>{notice}<ol>" + "".join(f"<li>{i}</li>" for i in items)
                   + f"</ol>{shot}")
 
     log = changelog(s["body"])
