@@ -371,30 +371,36 @@ def load_external(sources, ext_root, allow, errors, warnings, taken, base=GITHUB
 
 # ------------------------------------------------------------------ build
 
-DEFAULT_THEME = {"title": "Skills-galleriet", "primary": "#00557f",
-                 "background": "#ffffff", "text": "#1a1a1a", "logo": ""}
+# Defaults follow Teknikcollege's graphical profile (2022); site-theme.json overrides.
+DEFAULT_THEME = {"title": "Skills-galleriet", "primary": "#222c37", "accent": "#f5b835",
+                 "secondary": "#31b1b3", "background": "#ffffff", "text": "#222c37", "logo": ""}
 
-CSS = """:root{--p:%(primary)s;--bg:%(background)s;--fg:%(text)s;--muted:#4a4a4a;--card:#f3f5f7;--warn:#7a4100}
+CSS = """:root{--p:%(primary)s;--a:%(accent)s;--s:%(secondary)s;--bg:%(background)s;--fg:%(text)s;--muted:#555555;--line:#e8e8e8;--tint:#fdf1d7}
 *{box-sizing:border-box}
-body{margin:0;font:1rem/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--fg)}
-.top{background:var(--p);padding:.75rem 1rem}
-.top a{color:#fff;font-weight:700;font-size:1.15rem;text-decoration:none;display:flex;align-items:center;gap:.6rem}
+body{margin:0;font:1rem/1.6 "Helvetica Neue",Helvetica,Arial,sans-serif;background:var(--bg);color:var(--fg)}
+.top{background:var(--p);border-bottom:.4rem solid var(--a);padding:1rem}
+.top a{max-width:48rem;margin:0 auto;display:flex;align-items:center;gap:.6rem;color:#fff;font-weight:300;font-size:1.05rem;letter-spacing:.14em;text-transform:uppercase;text-decoration:none}
 .logo{height:2rem}
-main{max-width:50rem;margin:0 auto;padding:1rem}
-a{color:var(--p)}
-h1{margin:.5rem 0}
-h2{margin-top:2rem}
-.card{background:var(--card);border-radius:.5rem;padding:1rem;margin:0 0 1rem}
-.card h3{margin:0 0 .25rem}
-.meta{color:var(--muted);font-size:.92rem}
-.flag{display:inline-block;background:#fff4e5;color:var(--warn);border:1px solid var(--warn);border-radius:1rem;padding:0 .55rem;font-size:.85rem}
-.notice{background:#fff4e5;color:#4a2700;border-left:.35rem solid var(--warn);padding:.6rem .8rem}
-.version{font-size:1.2rem;font-weight:700;border-left:.35rem solid var(--p);padding:.5rem .8rem;background:var(--card)}
-textarea{width:100%%;min-height:14rem;font:.85rem/1.4 ui-monospace,Menlo,Consolas,monospace;padding:.5rem}
-button,.btn{display:inline-block;background:var(--p);color:#fff;border:0;border-radius:.4rem;padding:.8rem 1.3rem;font-size:1rem;font-weight:600;text-decoration:none;cursor:pointer}
-a:focus-visible,button:focus-visible,textarea:focus-visible{outline:3px solid #ffbf47;outline-offset:2px}
-.shot{max-width:100%%;height:auto;border:1px solid #ccc}
-footer{max-width:50rem;margin:2rem auto 0;padding:1rem;color:var(--muted);font-size:.85rem;border-top:1px solid #ccc}
+main{max-width:50rem;margin:0 auto;padding:1.5rem 1rem}
+a{color:var(--p);text-underline-offset:.15em}
+a:hover{text-decoration-color:var(--s);text-decoration-thickness:.12em}
+h1{margin:.75rem 0 1rem;font-weight:300;font-size:clamp(1.6rem,6vw,2.4rem);line-height:1.2;letter-spacing:.06em;text-transform:uppercase}
+h2{margin:2.5rem 0 .75rem;font-size:1.3rem}
+.card{background:var(--bg);border:1px solid var(--line);border-left:.4rem solid var(--s);padding:1.1rem 1.25rem;margin:0 0 1rem}
+.card h3{margin:0 0 .35rem;font-size:1.15rem}
+.card h3 a{text-decoration:none}
+.card h3 a:hover{text-decoration:underline}
+.meta{color:var(--muted);font-size:.9rem}
+.flag{display:inline-block;background:var(--a);color:var(--p);border-radius:1rem;padding:0 .6rem;font-size:.85rem;font-weight:700}
+.notice{background:var(--tint);border-left:.4rem solid var(--a);padding:.7rem .9rem}
+.version{font-size:1.15rem;font-weight:700;border-left:.4rem solid var(--a);padding:.6rem .9rem;background:var(--line)}
+textarea{width:100%%;min-height:14rem;font:.85rem/1.45 ui-monospace,Menlo,Consolas,monospace;padding:.6rem;border:1px solid var(--muted);color:var(--fg)}
+button,.btn{display:inline-block;background:var(--a);color:var(--p);border:0;padding:.85rem 1.4rem;font-family:inherit;font-size:.95rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;cursor:pointer}
+button:hover,.btn:hover{background:var(--p);color:#fff}
+a:focus-visible,button:focus-visible,textarea:focus-visible{outline:3px solid var(--p);outline-offset:2px}
+.top a:focus-visible{outline-color:#fff}
+.shot{max-width:100%%;height:auto;border:1px solid var(--line)}
+footer{max-width:50rem;margin:3rem auto 0;padding:1.25rem 1rem;color:var(--muted);font-size:.85rem;border-top:.25rem solid var(--a)}
 """
 
 COPY_JS = """<script>

@@ -1,7 +1,9 @@
 {
   "title": "Skills-galleriet",
-  "primary": "#00557f",
+  "primary": "#222c37",
+  "accent": "#f5b835",
+  "secondary": "#31b1b3",
   "background": "#ffffff",
-  "text": "#1a1a1a",
+  "text": "#222c37",
   "logo": ""
 }
