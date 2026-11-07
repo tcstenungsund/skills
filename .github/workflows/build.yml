@@ -1,0 +1,66 @@
+name: Bygg skills-galleriet
+
+on:
+  push:
+    branches: [main]
+    paths: &paths
+      - "skills/**"
+      - "sources.json"
+      - "site-theme.json"
+      - "redirects.json"
+      - "sensitive-allow.txt"
+      - "docs/screenshots/**"
+      - "scripts/**"
+      - ".github/workflows/build.yml"
+  pull_request:
+    paths: *paths
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0 # full history: used to warn when 'updated' was not bumped
+
+      - name: Läs Pages-inställningar
+        id: pages
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
+
+      - name: Testa generatorn
+        run: python3 -m unittest discover -s scripts -p 'test_*.py'
+
+      - name: Kontrollera skills och bygg webbplatsen
+        env:
+          SITE_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+        run: python3 scripts/build_site.py
+
+      - name: Ladda upp webbplatsen
+        if: steps.pages.outcome == 'success'
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publicera på GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
