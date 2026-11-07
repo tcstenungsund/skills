@@ -1,3 +1,4 @@
 site/
 .external/
 __pycache__/
+docs/kallor/
